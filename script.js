@@ -6,18 +6,25 @@ let cols = 20;
 let celWidth = canvas.width / cols;
 let celHeight = canvas.height / rows;
 
+let snake = [
+    { x: 2, y: 3 },
+    { x: 3, y: 3 },
+    { x: 4, y: 3 },
+    { x: 4, y: 4 },
+]
+let food = { x: 5, y: 5 }
+
 draw()
 
 function draw() {
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = 'white';
-    add(2, 3);
-    add(3, 3);
-    add(4, 3);
-    add(4, 4);
+
+    snake.forEach(part => add(part.x, part.y))
+
     ctx.fillStyle = 'green';
-    add(8, 8);
+    add(food.x, food.y);
 
 }
 
