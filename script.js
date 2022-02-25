@@ -6,13 +6,16 @@ let cols = 20;
 let celWidth = canvas.width / cols;
 let celHeight = canvas.height / rows;
 
+let direction;
+
 let snake = [
-    { x: 2, y: 3 },
-    { x: 3, y: 3 },
-    { x: 4, y: 3 },
-    { x: 4, y: 4 },
+    { x: 19, y: 3 },
 ]
 let food = { x: 5, y: 5 }
+
+document.addEventListener('keydown', KeyDown);
+
+setInterval(GameLoop, 200);
 
 draw()
 
@@ -26,10 +29,41 @@ function draw() {
     ctx.fillStyle = 'green';
     add(food.x, food.y);
 
+    requestAnimationFrame(draw);
 }
 
 function add(x, y) {
     ctx.fillRect(x * celWidth, y * celHeight, celWidth - 1, celHeight - 1);
+}
+
+function GameLoop() {
+    if (direction == 'LEFT') {
+        snake[0].x--;
+    }
+    if (direction == 'RIGHT') {
+        snake[0].x++;
+    }
+    if (direction == 'UP') {
+        snake[0].y--;
+    }
+    if (direction == 'DOWN') {
+        snake[0].y++;
+    }
+}
+
+function KeyDown(e) {
+    if (e.keyCode == 37 || e.keyCode == 65) {
+        direction = 'LEFT';
+    }
+    if (e.keyCode == 39 || e.keyCode == 68) {
+        direction = 'RIGHT';
+    }
+    if (e.keyCode == 38 || e.keyCode == 87) {
+        direction = 'UP';
+    }
+    if (e.keyCode == 40 || e.keyCode == 83) {
+        direction = 'DOWN';
+    }
 }
 
 
