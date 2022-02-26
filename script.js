@@ -11,13 +11,16 @@ let direction;
 let snake = [
     { x: 19, y: 3 },
 ]
-let food = { x: 5, y: 5 }
+let food;
 
 document.addEventListener('keydown', KeyDown);
 
+PlaceFood();
+
 setInterval(GameLoop, 200);
 
-draw()
+draw();
+
 
 function draw() {
     ctx.fillStyle = 'black';
@@ -49,6 +52,10 @@ function GameLoop() {
     if (direction == 'DOWN') {
         snake[0].y++;
     }
+
+    if (snake[0].x == food.x && snake[0].y == food.y) {
+        PlaceFood();
+    }
 }
 
 function KeyDown(e) {
@@ -64,6 +71,16 @@ function KeyDown(e) {
     if (e.keyCode == 40 || e.keyCode == 83) {
         direction = 'DOWN';
     }
+}
+
+
+function PlaceFood() {
+    let randomX = Math.floor(Math.random() * cols);
+    let randomY = Math.floor(Math.random() * rows);
+    food = {
+        x: randomX,
+        y: randomY
+    };
 }
 
 
