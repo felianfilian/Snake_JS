@@ -8,19 +8,17 @@ let celHeight = canvas.height / rows;
 
 let direction;
 
-let snake = [
-    { x: 19, y: 3 },
-]
+snake = [{ x: Math.floor(cols / 2), y: Math.floor(rows / 2) }];
 let food;
+let foodCollected = false;
 
-document.addEventListener('keydown', KeyDown);
+
 
 PlaceFood();
 
 setInterval(GameLoop, 200);
-
+document.addEventListener('keydown', KeyDown);
 draw();
-
 
 function draw() {
     ctx.fillStyle = 'black';
@@ -39,7 +37,25 @@ function add(x, y) {
     ctx.fillRect(x * celWidth, y * celHeight, celWidth - 1, celHeight - 1);
 }
 
+function ShiftSnake() {
+    for (let i = snake.length - 1; i > 0; i--) {
+        const part = snake[i];
+        const lastPart = snake[i - 1];
+        part.x = lastPart.x;
+        part.y = lastPart.y;
+    }
+}
+
 function GameLoop() {
+    GameOver();
+
+    if (foodCollected) {
+        snake = [{ x: snake[0].x, y: snake[0].y }, ...snake];
+        foodCollected = false;
+    }
+
+    ShiftSnake();
+
     if (direction == 'LEFT') {
         snake[0].x--;
     }
@@ -55,6 +71,7 @@ function GameLoop() {
 
     if (snake[0].x == food.x && snake[0].y == food.y) {
         PlaceFood();
+        foodCollected = true;
     }
 }
 
@@ -74,6 +91,7 @@ function KeyDown(e) {
 }
 
 
+
 function PlaceFood() {
     let randomX = Math.floor(Math.random() * cols);
     let randomY = Math.floor(Math.random() * rows);
@@ -81,6 +99,17 @@ function PlaceFood() {
         x: randomX,
         y: randomY
     };
+}
+
+function GameOver() {
+    let firstPart = snake[0];
+    let otherPart = snake.slice(1);
+    let duplicatePart = otherPart.find(part => part.x == firstPart.x && part.y == firstPart.y);
+    if (snake[0].x < 0 || snake[0].x > cols - 1 || snake[0].y < 0 || snake[0].y > rows - 1 || duplicatePart) {
+        snake = [{ x: Math.floor(cols / 2), y: Math.floor(rows / 2) }];
+        PlaceFood();
+        direction = "";
+    }
 }
 
 
